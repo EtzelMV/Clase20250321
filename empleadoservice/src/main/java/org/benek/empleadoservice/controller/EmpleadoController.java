@@ -10,6 +10,12 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controlador REST para la entidad Empleado.
+ *
+ * Ofrece operaciones para obtener la lista de todos los empleados, buscar un empleado por su ID,
+ * crear un nuevo empleado y eliminar un empleado existente.
+ */
 @RestController
 public class EmpleadoController {
 
@@ -19,11 +25,22 @@ public class EmpleadoController {
         this.empleadoRepository = empleadoRepository;
     }
 
+    /**
+     * Obtiene la lista de todos los empleados.
+     *
+     * @return ResponseEntity con la lista de empleados
+     */
     @GetMapping("/empleados")
     public ResponseEntity<List<Empleado>> listAll() {
         return ResponseEntity.ok(empleadoRepository.findAll());
     }
 
+    /**
+     * Busca un empleado por su ID.
+     *
+     * @param id el identificador del empleado a buscar
+     * @return ResponseEntity con el empleado encontrado o un estado de no encontrado si no existe
+     */
     @GetMapping("/empleados/{id}")
     public ResponseEntity<Empleado> findById(@PathVariable Long id) {
         Optional<Empleado> empleado = empleadoRepository.findById(id);
@@ -34,6 +51,12 @@ public class EmpleadoController {
         }
     }
 
+    /**
+     * Crea un nuevo empleado.
+     *
+     * @param nuevoEmpleado el empleado a crear
+     * @return ResponseEntity con la ubicacion del empleado creado
+     */
     @PostMapping("/empleados")
     public ResponseEntity<Empleado> createEmpleado(@RequestBody Empleado nuevoEmpleado, UriComponentsBuilder ucb) {
         Empleado empleadoGuardado = empleadoRepository.save(nuevoEmpleado);
@@ -45,6 +68,13 @@ public class EmpleadoController {
         return ResponseEntity.created(uriEmpleado).build();
     }
 
+    /**
+     * Actualiza un empleado existente.
+     *
+     * @param empleadoActualizar el empleado con los datos actualizados
+     * @param id el ID del empleado a actualizar
+     * @return ResponseEntity con el empleado actualizado o un estado de no encontrado si no existe
+     */
     @PutMapping("/empleados/{id}")
     public ResponseEntity<?> updateEmpleado(@RequestBody Empleado empleadoActualizar,
                                             @PathVariable Long id) {
@@ -60,6 +90,12 @@ public class EmpleadoController {
                 }));
     }
 
+    /**
+     * Elimina un empleado existente.
+     *
+     * @param id el ID del empleado a eliminar
+     * @return ResponseEntity con el estado de eliminacion del empleado
+     */
     @DeleteMapping("/empleados/{id}")
     public ResponseEntity<Void> deleteEmpleado(@PathVariable Long id) {
         empleadoRepository.deleteById(id);
