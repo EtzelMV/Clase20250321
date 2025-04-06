@@ -44,11 +44,7 @@ public class EmpleadoController {
     @GetMapping("/empleados/{id}")
     public ResponseEntity<Empleado> findById(@PathVariable Long id) {
         Optional<Empleado> empleado = empleadoRepository.findById(id);
-        if (empleado.isPresent()) {
-            return ResponseEntity.ok(empleado.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return empleado.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**
